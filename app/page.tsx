@@ -85,31 +85,99 @@ const memoryCards = [
   { title: 'mi lugar feliz', date: '12/06/2025' },
 ] as const;
 
-const timelineMonths = [
+type PreviewSlide = {
+  title: string;
+  subtitle: string;
+  image: string;
+  tag: string;
+  bullets: readonly string[];
+};
+
+const previewSlides: readonly PreviewSlide[] = [
   {
-    month: 'Maio 2025',
-    count: '3 memórias',
-    label: 'viagem',
-    side: 'right',
+    title: 'Casa do Relacionamento',
+    subtitle: 'O painel onde a história de vocês começa a ganhar forma.',
+    image: '/app-previews/home.png',
+    tag: 'Casa do casal',
+    bullets: [
+      'Mostra memórias, vínculo e próxima data em um só lugar.',
+      'Passa a sensação de casa viva, não de menu frio.',
+      'Ajuda a entender o valor do Sentimi nos primeiros segundos.',
+    ],
   },
   {
-    month: 'Junho 2025',
-    count: '2 memórias',
-    label: 'Amor mio',
-    side: 'left',
+    title: 'Casa do Cuidado',
+    subtitle: 'Entenda o clima emocional antes de cobrar, conversar ou decidir.',
+    image: '/app-previews/cuidado.png',
+    tag: 'Cuidado emocional',
+    bullets: [
+      'Transforma percepção emocional em presença prática.',
+      'Ajuda o casal a escolher melhor o momento da conversa.',
+      'Vende a proposta central do app com mais força.',
+    ],
   },
   {
-    month: 'Julho 2025',
-    count: '1 memória',
-    label: 'Nuestro encuentro',
-    side: 'right',
+    title: 'Memórias',
+    subtitle: 'Guarde momentos com imagem e transforme lembranças em capítulos.',
+    image: '/app-previews/memorias.png',
+    tag: 'Álbum emocional',
+    bullets: [
+      'Dá valor visual para os momentos que merecem ficar vivos.',
+      'Mostra o app como espaço de revisitar, não só registrar.',
+      'Conecta emoção, imagem e história em um fluxo natural.',
+    ],
+  },
+  {
+    title: 'Linha do Tempo',
+    subtitle: 'Reviva a história como um filme, por meses, fases e capítulos.',
+    image: '/app-previews/linha-do-tempo.png',
+    tag: 'História viva',
+    bullets: [
+      'Organiza a jornada de vocês como uma narrativa bonita.',
+      'Mostra progresso emocional com cara de produto premium.',
+      'Cria desejo de abrir o app só para revisitar momentos.',
+    ],
+  },
+  {
+    title: 'Planeta da História',
+    subtitle: 'Veja as memórias como pontos vivos conectados pela jornada de vocês.',
+    image: '/app-previews/planeta.png',
+    tag: 'Mapa emocional',
+    bullets: [
+      'Transforma memórias em um mapa visual desejável de explorar.',
+      'Diferencia o Sentimi de apps genéricos de casal.',
+      'Reforça a ideia de história viva crescendo com o tempo.',
+    ],
+  },
+  {
+    title: 'Datas Importantes',
+    subtitle: 'Lembretes, promessas e momentos que não merecem passar batido.',
+    image: '/app-previews/datas.png',
+    tag: 'Lembretes',
+    bullets: [
+      'Deixa claro que o app ajuda antes do esquecimento virar dor.',
+      'Mostra próximos marcos com prioridade e contexto.',
+      'Fortalece a entrada Free e o valor prático do Premium.',
+    ],
+  },
+  {
+    title: 'Biblioteca',
+    subtitle:
+      'Conteúdos para entender melhor o relacionamento e cuidar com mais presença.',
+    image: '/app-previews/biblioteca.png',
+    tag: 'Leitura para casais',
+    bullets: [
+      'Amplia o valor percebido sem parecer curso ou promessa milagrosa.',
+      'Une conteúdo, cuidado e continuidade dentro do mesmo universo.',
+      'Ajuda o Premium a parecer mais completo e mais sério.',
+    ],
   },
 ] as const;
 
-const chapterCards = [
-  { month: 'Maio', count: '3 memórias' },
-  { month: 'Junho', count: '2 memórias' },
-  { month: 'Julho', count: '1 memória' },
+const previewBenefits = [
+  'Veja antes de entrar',
+  'Comece grátis',
+  'Premium por R$19,90',
 ] as const;
 
 const careSellingPoints = [
@@ -254,6 +322,170 @@ function BottomNav({ active }: { active: string }) {
         </div>
       ))}
     </div>
+  );
+}
+
+function PreviewCarousel() {
+  const [activePreview, setActivePreview] = useState(0);
+  const [missingPreviews, setMissingPreviews] = useState<Record<string, true>>({});
+
+  const currentSlide = previewSlides[activePreview];
+  const currentNumber = String(activePreview + 1).padStart(2, '0');
+  const totalNumber = String(previewSlides.length).padStart(2, '0');
+  const currentImageMissing = Boolean(missingPreviews[currentSlide.image]);
+
+  const goToPreviousPreview = () => {
+    setActivePreview((current) =>
+      current === 0 ? previewSlides.length - 1 : current - 1
+    );
+  };
+
+  const goToNextPreview = () => {
+    setActivePreview((current) =>
+      current === previewSlides.length - 1 ? 0 : current + 1
+    );
+  };
+
+  const registerMissingPreview = (image: string) => {
+    setMissingPreviews((current) => {
+      if (current[image]) {
+        return current;
+      }
+
+      return {
+        ...current,
+        [image]: true,
+      };
+    });
+  };
+
+  return (
+    <section className="section preview-section">
+      <div className="container">
+        <SectionIntro
+          align="center"
+          eyebrow="Prévia real do app"
+          title="Veja o Sentimi por dentro"
+          description="Uma prévia da casa digital onde memórias, cuidado e datas importantes ficam vivos em um só lugar."
+        />
+
+        <div className="preview-showcase">
+          <div className="preview-visual" data-reveal>
+            <div className="preview-stage">
+              <span className="preview-particle preview-particle--one" aria-hidden="true" />
+              <span className="preview-particle preview-particle--two" aria-hidden="true" />
+              <span className="preview-particle preview-particle--three" aria-hidden="true" />
+
+              <div className="preview-phone preview-phone--shadow preview-phone--back-one" aria-hidden="true">
+                <div className="preview-phone__ghost" />
+              </div>
+              <div className="preview-phone preview-phone--shadow preview-phone--back-two" aria-hidden="true">
+                <div className="preview-phone__ghost" />
+              </div>
+
+              <button
+                type="button"
+                className="preview-arrow preview-arrow--left"
+                aria-label="Ver tela anterior do Sentimi"
+                onClick={goToPreviousPreview}
+              >
+                <span aria-hidden="true">‹</span>
+              </button>
+
+              <article className="preview-phone preview-phone--active">
+                <div className="preview-phone__hardware" aria-hidden="true">
+                  <span />
+                </div>
+
+                <div className="preview-phone__status" aria-hidden="true">
+                  <span>11:07</span>
+                  <div>
+                    <span />
+                    <span />
+                    <span />
+                  </div>
+                </div>
+
+                <div className="preview-phone__screen">
+                  {currentImageMissing ? (
+                    <div className="preview-phone__placeholder">
+                      <span>{currentSlide.tag}</span>
+                      <strong>{currentSlide.title}</strong>
+                      <p>adicione a imagem em public/app-previews</p>
+                    </div>
+                  ) : (
+                    <>
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img
+                        key={currentSlide.image}
+                        className="preview-phone__image"
+                        src={currentSlide.image}
+                        alt={`Prévia do app Sentimi: ${currentSlide.title}`}
+                        loading="eager"
+                        onError={() => registerMissingPreview(currentSlide.image)}
+                      />
+                    </>
+                  )}
+                </div>
+              </article>
+
+              <button
+                type="button"
+                className="preview-arrow preview-arrow--right"
+                aria-label="Ver próxima tela do Sentimi"
+                onClick={goToNextPreview}
+              >
+                <span aria-hidden="true">›</span>
+              </button>
+            </div>
+
+            <div className="preview-dots" aria-label="Indicadores das telas do Sentimi">
+              {previewSlides.map((slide, index) => (
+                <button
+                  key={slide.title}
+                  type="button"
+                  className={`preview-dot${index === activePreview ? ' is-active' : ''}`}
+                  aria-label={`Abrir slide ${slide.title}`}
+                  aria-pressed={index === activePreview}
+                  onClick={() => setActivePreview(index)}
+                />
+              ))}
+            </div>
+          </div>
+
+          <div className="preview-copy" data-reveal aria-live="polite">
+            <div className="preview-copy__meta">
+              <span className="preview-copy__tag">{currentSlide.tag}</span>
+              <span className="preview-copy__count">
+                {currentNumber} / {totalNumber}
+              </span>
+            </div>
+
+            <h3>{currentSlide.title}</h3>
+            <p>{currentSlide.subtitle}</p>
+
+            <ul className="preview-copy__bullets">
+              {currentSlide.bullets.map((bullet) => (
+                <li key={bullet}>{bullet}</li>
+              ))}
+            </ul>
+
+            <a className="button button--primary" href={APP_URL}>
+              Começar grátis
+            </a>
+          </div>
+        </div>
+
+        <div className="preview-benefits">
+          {previewBenefits.map((benefit) => (
+            <article key={benefit} className="preview-benefit" data-reveal>
+              <span className="preview-benefit__dot" aria-hidden="true" />
+              <strong>{benefit}</strong>
+            </article>
+          ))}
+        </div>
+      </div>
+    </section>
   );
 }
 
@@ -751,166 +983,7 @@ export default function Home() {
           </div>
         </section>
 
-        <section className="section story-section">
-          <div className="container story-section__grid">
-            <div className="story-section__copy" data-reveal>
-              <SectionIntro
-                eyebrow="Linha do Tempo"
-                title="Reviva a história como um filme."
-                description="Meses, capítulos e cenas do ano organizados como uma experiência viva de revisitar."
-              />
-
-              <div className="story-note">
-                <strong>2025 tem 6 memórias guardadas para revisitar.</strong>
-              </div>
-            </div>
-
-            <div className="timeline-stage" data-reveal>
-              <div className="timeline-stage__brand">sentimi</div>
-              <div className="timeline-stage__year">2025</div>
-
-              <button
-                type="button"
-                className="timeline-stage__nav timeline-stage__nav--left"
-                aria-label="Capítulo anterior"
-              >
-                <span aria-hidden="true">‹</span>
-              </button>
-              <button
-                type="button"
-                className="timeline-stage__nav timeline-stage__nav--right"
-                aria-label="Próximo capítulo"
-              >
-                <span aria-hidden="true">›</span>
-              </button>
-
-              <div className="timeline-phone" aria-hidden="true">
-                <div className="timeline-phone__top">
-                  <span className="is-live" />
-                  <span />
-                  <span />
-                  <span />
-                  <span />
-                </div>
-
-                <div className="timeline-phone__rail" />
-
-                {timelineMonths.map((item, index) => (
-                  <article
-                    key={item.month}
-                    className={`timeline-month timeline-month--${item.side}`}
-                  >
-                    <div className={`timeline-polaroid timeline-polaroid--${index + 1}`}>
-                      <div className="timeline-polaroid__photo" />
-                      <strong>{item.label}</strong>
-                    </div>
-
-                    <div className="timeline-copy">
-                      <strong>{item.month}</strong>
-                      <span>{item.count}</span>
-                      <p>{item.label}</p>
-                      <button type="button">Abrir mês</button>
-                    </div>
-                  </article>
-                ))}
-              </div>
-
-              <div className="chapter-strip">
-                {chapterCards.map((item) => (
-                  <article key={item.month} className="chapter-card">
-                    <div className={`chapter-card__cover chapter-card__cover--${item.month.toLowerCase()}`} />
-                    <strong>{item.month}</strong>
-                    <p>{item.count}</p>
-                  </article>
-                ))}
-              </div>
-            </div>
-          </div>
-        </section>
-
-        <section className="section planet-section">
-          <div className="container">
-            <div className="planet-panel" data-reveal>
-              <div className="planet-panel__copy">
-                <span className="eyebrow">Planeta da História</span>
-                <h2>Cada memória floresce como um ponto vivo.</h2>
-                <p>
-                  Um mapa emocional com árvore central, conexões e capítulos que
-                  fazem a jornada de vocês parecer real, organizada e desejável de
-                  abrir de novo.
-                </p>
-
-                <div className="planet-seals">
-                  <span>Mapa emocional</span>
-                  <span>Linha viva</span>
-                </div>
-              </div>
-
-              <div className="planet-map" aria-hidden="true">
-                <div className="planet-map__top">
-                  <div>
-                    <strong>Planeta da História</strong>
-                    <p>6 frutos • 10 fotos guardadas</p>
-                  </div>
-                  <span>100%</span>
-                </div>
-
-                <div className="planet-map__controls">
-                  <div className="planet-field">Escolher data no calendário</div>
-                  <div className="planet-button">Calendário</div>
-                </div>
-
-                <div className="planet-map__toolbar">
-                  <span>+ +</span>
-                  <span>- -</span>
-                  <span>Centro</span>
-                  <span>Primeira</span>
-                  <span>Última</span>
-                </div>
-
-                <div className="planet-canvas">
-                  <div className="planet-canvas__tree" />
-
-                  <article className="planet-node planet-node--one">
-                    <div className="planet-node__photo planet-node__photo--one" />
-                    <strong>viaje</strong>
-                    <p>05/05/2025</p>
-                  </article>
-
-                  <article className="planet-node planet-node--two">
-                    <div className="planet-node__photo planet-node__photo--two" />
-                    <strong>mi reina</strong>
-                    <p>05/05/2025</p>
-                  </article>
-
-                  <article className="planet-node planet-node--three">
-                    <div className="planet-node__photo planet-node__photo--three" />
-                    <strong>mi preciosa hermosa</strong>
-                    <p>14/05/2025</p>
-                  </article>
-
-                  <article className="planet-node planet-node--four">
-                    <div className="planet-node__photo planet-node__photo--four" />
-                    <strong>Amor mio</strong>
-                    <p>06/06/2025</p>
-                  </article>
-
-                  <article className="planet-node planet-node--five">
-                    <div className="planet-node__photo planet-node__photo--five" />
-                    <strong>mi lugar feliz</strong>
-                    <p>12/06/2025</p>
-                  </article>
-
-                  <article className="planet-node planet-node--six">
-                    <div className="planet-node__photo planet-node__photo--six" />
-                    <strong>Nuestro encuentro</strong>
-                    <p>19/07/2025</p>
-                  </article>
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
+        <PreviewCarousel />
 
         <section className="section care-commercial-section">
           <div className="container care-commercial__grid">
