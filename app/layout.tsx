@@ -1,9 +1,9 @@
 import type { Metadata } from 'next';
 import './globals.css';
 
-const siteTitle = 'Sentimi | A casa digital do seu relacionamento';
+const siteTitle = 'Sentimi | A casa digital onde o relacionamento continua vivo';
 const siteDescription =
-  'Guarde memórias, acompanhe datas importantes, entenda o clima do coração e mantenha vivo o que vocês estão construindo.';
+  'Memórias, datas, cuidado emocional e detalhes importantes reunidos em uma casa digital privada para o casal. Comece grátis e ative o Premium por R$19,90 quando quiser viver tudo.';
 
 export const metadata: Metadata = {
   title: siteTitle,
